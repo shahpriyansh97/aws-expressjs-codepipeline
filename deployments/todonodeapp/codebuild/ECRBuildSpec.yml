@@ -1,0 +1,40 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.9
+      nodejs: 18
+    commands:
+      # Install any dependencies needed for your build
+      - npm install -g aws-cdk
+      - pip install --upgrade pip
+      - pip install --upgrade awscli
+
+  pre_build:
+    commands:
+      # Login to Amazon ECR
+      - echo "Hello world"
+
+  build:
+    commands:
+      # Build Docker image
+      - echo "Building Docker image..."
+
+  post_build:
+    commands:
+      # Push Docker image to ECR
+      - echo "Pushing Docker image to ECR..."
+
+artifacts:
+  files:
+    - imageDefinitions.json
+    - appspec.yaml
+    - taskdef.json
+  discard-paths: yes
+
+cache:
+  paths:
+    - 'node_modules/**/*'
+    - '/root/.npm/**/*'
+    - '/root/.pip-cache/**/*'

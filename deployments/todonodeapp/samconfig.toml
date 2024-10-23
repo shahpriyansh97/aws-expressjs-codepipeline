@@ -1,0 +1,10 @@
+version = 0.1
+[default.deploy.parameters]
+stack_name = "codepipeline-todoexpress-app"
+resolve_s3 = true
+s3_prefix = "codepipeline-todoexpress-app"
+region = "us-west-2"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "GitHubOwner=\"shahpriyansh97\" GitHubRepo=\"aws-expressjs-codepipeline\" GitHubBranch=\"release/production\""
+image_repositories = []
