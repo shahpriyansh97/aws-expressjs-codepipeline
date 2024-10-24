@@ -15,23 +15,22 @@ phases:
       - REPOSITORY_URI=$ECR_URI
       - $(aws ecr get-login --no-include-email --region $AWS_REGION)
       - export IMAGE_TAG=$(date +%Y%m%d%H%M%S)  # Generate a unique timestamp tag
-      - echo "Checking for existing ECR images..."
-      - LAST_IMAGE_TAG=$(aws ecr describe-images --repository-name ${REPOSITORY_URI##*/} --query 'sort_by(imageDetails[?imageTags!=`null`], &imagePushedAt)[-1].imageTags[0]' --output text --region $AWS_REGION) || true
 
   build:
     commands:
       - echo "Changing directory to project folder..."
       - cd todonodeapp  # Change to the project folder
-      - echo "Pulling the last image from ECR..."
-      - docker pull $REPOSITORY_URI:$LAST_IMAGE_TAG  # Pull the last image
-      - docker tag $REPOSITORY_URI:$LAST_IMAGE_TAG $IMAGE_NAME:latest
       - echo "Building Docker image from todonodeapp directory..."
       - docker build -t $IMAGE_NAME:$IMAGE_TAG .  # Build the image using the current directory
 
   post_build:
     commands:
-      - echo "Tagging the last image with the new IMAGE_TAG..."
-      - docker tag $REPOSITORY_URI:$LAST_IMAGE_TAG $REPOSITORY_URI:$IMAGE_TAG  # Tag the pulled image with the new tag
       - echo "Pushing Docker image to ECR..."
       - docker tag $IMAGE_NAME:$IMAGE_TAG $REPOSITORY_URI:$IMAGE_TAG  # Tag the image for ECR
+      - docker tag $IMAGE_NAME:$IMAGE_TAG $REPOSITORY_URI:latest  # Tag the image for ECR
       - docker push $REPOSITORY_URI:$IMAGE_TAG  # Push the tagged image to ECR
+      - docker push $REPOSITORY_URI:latest  # Push the tagged image to ECR
+      - echo "Creating output artifact for pushed image..."
+
+artifacts:
+  buildImage: "${REPOSITORY_URI}:${IMAGE_TAG}"
