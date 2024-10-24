@@ -90,7 +90,7 @@ Resources:
         PrivilegedMode: true
       Source:
         Type: CODEPIPELINE
-        BuildSpec: deployments\todonodeapp\codebuild\ECRBuildSpec.yml
+        BuildSpec: deployments/todonodeapp/codebuild/ECRBuildSpec.yml
 
 
   # Pipeline
