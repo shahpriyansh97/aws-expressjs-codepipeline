@@ -12,17 +12,20 @@ phases:
     commands:
       - echo "Logging in to Amazon ECR..."
       - export AWS_REGION=$AWS_REGION
-      - REPOSITORY_URI=$ECR_URI
+      - REPOSITORY_URI=$ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME
       - $(aws ecr get-login --no-include-email --region $AWS_REGION)
       - export IMAGE_TAG=$(date +%Y%m%d%H%M%S)  # Generate a unique timestamp tag
 
   build:
     commands:
-      - echo "Building Docker image..."
-      - docker build -t $IMAGE_NAME:$IMAGE_TAG .  # Use the generated tag
-      - docker tag $IMAGE_NAME:$IMAGE_TAG $REPOSITORY_URI:$IMAGE_TAG  # Tag the image for ECR
+      - echo "Changing directory to project folder..."
+      - pwd
+      - cd todonodeapp  # Change to the project folder
+      - echo "Building Docker image from todonodeapp directory..."
+      - docker build -t $IMAGE_NAME:$IMAGE_TAG .  # Build the image using the current directory
 
   post_build:
     commands:
       - echo "Pushing Docker image to ECR..."
+      - docker tag $IMAGE_NAME:$IMAGE_TAG $REPOSITORY_URI:$IMAGE_TAG  # Tag the image for ECR
       - docker push $REPOSITORY_URI:$IMAGE_TAG  # Push the tagged image to ECR
