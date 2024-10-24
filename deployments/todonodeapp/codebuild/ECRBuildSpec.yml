@@ -32,6 +32,6 @@ phases:
       - echo "{\"imageUri\": \"$REPOSITORY_URI:$IMAGE_TAG\"}" > image-manifest.json  # Create a JSON file with the image URI
 
 artifacts:
-  buildImage: ${REPOSITORY_URI}:${IMAGE_TAG}
+  buildImage: "${REPOSITORY_URI}:${IMAGE_TAG}"
   files:
     - image-manifest.json  # Include the JSON file as an output artifact
