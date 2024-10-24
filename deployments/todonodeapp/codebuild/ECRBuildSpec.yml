@@ -4,7 +4,6 @@ phases:
   install:
     runtime-versions:
       python: 3.9
-      nodejs: 18
     commands:
       # Install any dependencies needed for your build
       - npm install -g aws-cdk

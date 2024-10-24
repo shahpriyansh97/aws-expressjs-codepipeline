@@ -18,7 +18,6 @@ Parameters:
 
 
 Resources:
-
   # CodeBuild IAM Role
   CodeBuildServiceRole:
     Type: AWS::IAM::Role
@@ -30,9 +29,35 @@ Resources:
             Principal:
               Service: codebuild.amazonaws.com
             Action: sts:AssumeRole
+      Policies:
+        # Add inline policy for CloudWatch Logs
+        - PolicyName: CodeBuildCloudWatchLogsPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*  # Adjust the resource as needed
+
+        # Add inline policy for S3 access
+        - PolicyName: CodeBuildS3AccessPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:ListBucket  # Optional: if you want to list the bucket contents
+                Resource:
+                  - arn:aws:s3:::codepipeline-todoexpress-app-artifactbucket-bobepgzic05p
+                  - arn:aws:s3:::codepipeline-todoexpress-app-artifactbucket-bobepgzic05p/*
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonECS_FullAccess
-        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess  # Corrected this line
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
+
 
   # CodePipeline IAM Role
   CodePipelineServiceRole:
@@ -48,6 +73,7 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess
         - arn:aws:iam::aws:policy/AmazonS3FullAccess
+
 
 
   # Build and Push to ECR Project
