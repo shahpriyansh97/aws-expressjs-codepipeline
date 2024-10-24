@@ -19,7 +19,6 @@ phases:
   build:
     commands:
       - echo "Changing directory to project folder..."
-      - pwd
       - cd todonodeapp  # Change to the project folder
       - echo "Building Docker image from todonodeapp directory..."
       - docker build -t $IMAGE_NAME:$IMAGE_TAG .  # Build the image using the current directory
@@ -29,3 +28,10 @@ phases:
       - echo "Pushing Docker image to ECR..."
       - docker tag $IMAGE_NAME:$IMAGE_TAG $REPOSITORY_URI:$IMAGE_TAG  # Tag the image for ECR
       - docker push $REPOSITORY_URI:$IMAGE_TAG  # Push the tagged image to ECR
+      - echo "Creating output artifact for pushed image..."
+      - echo "{\"imageUri\": \"$REPOSITORY_URI:$IMAGE_TAG\"}" > image-manifest.json  # Create a JSON file with the image URI
+
+artifacts:
+  buildImage: ${REPOSITORY_URI}:${IMAGE_TAG}
+  files:
+    - image-manifest.json  # Include the JSON file as an output artifact
