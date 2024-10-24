@@ -6,7 +6,6 @@ phases:
       python: 3.9
     commands:
       # Install any dependencies needed for your build
-      - npm install -g aws-cdk
       - pip install --upgrade pip
       - pip install --upgrade awscli
 
@@ -27,7 +26,6 @@ phases:
 
 artifacts:
   files:
-    - imageDefinitions.json
     - appspec.yaml
     - taskdef.json
   discard-paths: yes

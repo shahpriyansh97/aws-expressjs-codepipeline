@@ -49,8 +49,7 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
-                  - s3:GetObject
-                  - s3:ListBucket  # Optional: if you want to list the bucket contents
+                  - s3:*  # Optional: if you want to list the bucket contents
                 Resource:
                   - arn:aws:s3:::codepipeline-todoexpress-app-artifactbucket-bobepgzic05p
                   - arn:aws:s3:::codepipeline-todoexpress-app-artifactbucket-bobepgzic05p/*
