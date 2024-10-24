@@ -24,14 +24,3 @@ phases:
       # Push Docker image to ECR
       - echo "Pushing Docker image to ECR..."
 
-artifacts:
-  files:
-    - appspec.yaml
-    - taskdef.json
-  discard-paths: yes
-
-cache:
-  paths:
-    - 'node_modules/**/*'
-    - '/root/.npm/**/*'
-    - '/root/.pip-cache/**/*'
