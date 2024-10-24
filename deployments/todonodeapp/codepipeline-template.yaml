@@ -131,11 +131,17 @@ Resources:
                 Version: '1'
               Configuration:
                 ProjectName: !Ref BuildProject
+                EnvironmentVariables: >
+                  [{"name": "ECR_URI", "type": "PLAINTEXT", "value": "021891598101.dkr.ecr.us-west-2.amazonaws.com/aws-demo/todonodeapp"},
+                   {"name": "AWS_REGION", "type": "PLAINTEXT", "value": "us-west-2"},
+                   {"name": "IMAGE_NAME", "type": "PLAINTEXT", "value": "todonodeapp"}]
               InputArtifacts:
                 - Name: SourceCode
               OutputArtifacts:
                 - Name: BuildOutput
               RunOrder: 1
+
+
 
 
   # S3 Bucket for artifacts

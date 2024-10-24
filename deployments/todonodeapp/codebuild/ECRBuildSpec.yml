@@ -5,22 +5,24 @@ phases:
     runtime-versions:
       python: 3.9
     commands:
-      # Install any dependencies needed for your build
       - pip install --upgrade pip
       - pip install --upgrade awscli
 
   pre_build:
     commands:
-      # Login to Amazon ECR
-      - echo "Hello world"
+      - echo "Logging in to Amazon ECR..."
+      - export AWS_REGION=$AWS_REGION
+      - REPOSITORY_URI=$ECR_URI
+      - $(aws ecr get-login --no-include-email --region $AWS_REGION)
+      - export IMAGE_TAG=$(date +%Y%m%d%H%M%S)  # Generate a unique timestamp tag
 
   build:
     commands:
-      # Build Docker image
       - echo "Building Docker image..."
+      - docker build -t $IMAGE_NAME:$IMAGE_TAG .  # Use the generated tag
+      - docker tag $IMAGE_NAME:$IMAGE_TAG $REPOSITORY_URI:$IMAGE_TAG  # Tag the image for ECR
 
   post_build:
     commands:
-      # Push Docker image to ECR
       - echo "Pushing Docker image to ECR..."
-
+      - docker push $REPOSITORY_URI:$IMAGE_TAG  # Push the tagged image to ECR
